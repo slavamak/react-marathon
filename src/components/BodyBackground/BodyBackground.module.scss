@@ -1,0 +1,24 @@
+.cover {
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  z-index: -1;
+  pointer-events: none;
+  position: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-color: #000;
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-image: linear-gradient(to top, rgba(26,40,120,0.70), rgba(10,143,196,0.70));
+  }
+}
