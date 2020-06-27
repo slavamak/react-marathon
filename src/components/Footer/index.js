@@ -1,13 +1,15 @@
 import React from 'react';
 
+import Wrapper from '../Wrapper';
+
 import s from './Footer.module.scss';
 
 const Footer = ({ children }) => {
   return (
     <footer className={s.footer}>
-      <div className="wrapper">
+      <Wrapper>
         {children}
-      </div>
+      </Wrapper>
     </footer>
   )
 }
