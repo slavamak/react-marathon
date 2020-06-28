@@ -1,0 +1,23 @@
+@import '../../styles/variables.scss';
+
+.wordsDay {
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 60px 0;
+
+    &Item {
+      flex: 0 0 calc(50% - #{$gutter});
+    }
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .wordsDay {
+    &__list {
+      &Item {
+        flex: 0 0 calc(33.33333% - #{$gutter});
+      }
+    }
+  }
+}

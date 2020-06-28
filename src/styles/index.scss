@@ -1,0 +1,41 @@
+@import './variables';
+
+body {
+  font-family: $baseFontFamily;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: $baseFontSize;
+  color: $baseFontColor;
+  margin: 0;
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+.section {
+  background-color: $backgroundColor;
+  color: $secondaryFontColor;
+  padding: $sectionPadding 0;
+
+  &__title {
+    text-transform: uppercase;
+    font-size: 2rem;
+  }
+}
+
+.wrapper {
+  width: 100%;
+  max-width: $siteWidth;
+  margin: 0 auto;
+  padding-left: $wrapperPadding;
+  padding-right: $wrapperPadding;
+}
+
+.wrapper--sm {
+  max-width: $siteWidthSmall;
+}
+
+.text-center {
+  text-align: center;
+}
