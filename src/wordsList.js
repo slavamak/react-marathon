@@ -1,46 +1,62 @@
 export const wordsList = [
-    {
-        eng: 'between',
-        rus: 'между'
-    },
-    {
-        eng: 'high',
-        rus: 'высокий'
-    },
-    {
-        eng: 'really',
-        rus: 'действительно'
-    },
-    {
-        eng: 'something',
-        rus: 'что-нибудь'
-    },
-    {
-        eng: 'most',
-        rus: 'большинство'
-    },
-    {
-        eng: 'another',
-        rus: 'другой'
-    },
-    {
-        eng: 'much',
-        rus: 'много'
-    },
-    {
-        eng: 'family',
-        rus: 'семья'
-    },
-    {
-        eng: 'own',
-        rus: 'личный'
-    },
-    {
-        eng: 'out',
-        rus: 'из/вне'
-    },
-    {
-        eng: 'leave',
-        rus: 'покидать'
-    },
+  {
+      id: '1',
+      eng: 'between',
+      rus: 'между'
+  },
+  {
+      id: '2',
+      eng: 'high',
+      rus: 'высокий'
+  },
+  {
+      id: '3',
+      eng: 'really',
+      rus: 'действительно'
+  },
+  {
+      id: '4',
+      eng: 'something',
+      rus: 'что-нибудь'
+  },
+  {
+      id: '5',
+      eng: 'most',
+      rus: 'большинство'
+  },
+  {
+      id: '6',
+      eng: 'another',
+      rus: 'другой'
+  },
+  {
+      id: '7',
+      eng: 'much',
+      rus: 'много'
+  },
+  {
+      id: '8',
+      eng: 'family',
+      rus: 'семья'
+  },
+  {
+      id: '9',
+      eng: 'own',
+      rus: 'личный'
+  },
+  {
+      id: '10',
+      eng: 'out',
+      rus: 'из/вне'
+  },
+  {
+      id: '11',
+      eng: 'leave',
+      rus: 'покидать'
+  },
+  {
+      id: '12',
+      eng: 'width',
+      rus: 'широкий'
+  },
 ];
