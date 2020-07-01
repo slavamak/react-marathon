@@ -7,7 +7,60 @@
     padding: 60px 0;
 
     &Item {
-      flex: 0 0 calc(50% - #{$gutter});
+      flex: 0 0 calc(100% - #{$gutter});
+    }
+  }
+
+  &__form {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+
+    input,
+    button {
+      width: 100%;
+      height: $cardHeight;
+      border: 1px solid $colorBorder;
+      border-radius: 0;
+      padding: 0 $gutter;
+    }
+
+    input {
+      font-size: 1rem;
+      margin-bottom: $gutter;
+    }
+
+    button {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+  }
+}
+
+@media screen and (min-width: 576px) {
+  .wordsDay {
+    &__list {
+      &Item {
+        flex: 0 0 calc(50% - #{$gutter});
+      }
+    }
+
+    &__form {
+      flex-direction: row;
+
+      button {
+        width: 50%;
+        margin-top: $gutter;
+      }
+
+      input {
+        width: auto;
+        margin-right: $gutter;
+        margin-bottom: 0;
+      }
     }
   }
 }
@@ -17,6 +70,15 @@
     &__list {
       &Item {
         flex: 0 0 calc(33.33333% - #{$gutter});
+      }
+    }
+
+    &__form {
+      flex-direction: row;
+
+      button {
+        width: auto;
+        margin-top: 0;
       }
     }
   }

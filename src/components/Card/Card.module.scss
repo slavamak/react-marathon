@@ -1,22 +1,49 @@
 @import '../../styles/variables.scss';
 
+.cardContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $gutter;
+}
+
 .card {
-  font-size: 18px;
+  font-size: 1.25rem;
   text-align: center;
-  margin-bottom: 12px;
   cursor: pointer;
   perspective: 1000px;
-  height: 33px;
-  width: 170px;
-  margin-right: $gutter;
+  height: $cardHeight;
+  width: 100%;
+}
 
-  &:nth-child(2n) {
-    margin-right: 0;
-  }
+.cardControls {
+  display: flex;
+  padding: 0 $gutter;
 
-  &.active {
-    .cardInner {
-      transform: rotateY(180deg);
+  span {
+    margin-right: 5px;
+    font-size: 1.25rem;
+
+    &:hover {
+      color: $colorAccent;
+    }
+
+    .isRemembered & {
+      &.check {
+        color: $colorSuccess;
+      }
+    }
+
+    &.check:hover {
+      color: $colorSuccess;
+    }
+
+    &.remove:hover {
+      color: $colorError;
+    }
+
+    &:last-child {
+      margin-right: 0;
     }
   }
 }
@@ -30,6 +57,10 @@
   transition: transform 0.6s;
   transform-style: preserve-3d;
   border: 1px solid $colorBorder;
+
+  .active & {
+    transform: rotateY(180deg);
+  }
 }
 
 .cardFront, 
@@ -39,7 +70,12 @@
   height: 100%;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  padding: 6px 12px;
+  padding: 0 $gutter;
+  line-height: $cardHeight;
+
+  .isRemembered & {
+    text-decoration: line-through;
+  }
 }
 
 .cardFront {
@@ -53,8 +89,18 @@
   transform: rotateY(180deg);
 }
 
+@media screen and (min-width: 576px) {
+  .cardContainer {
+    margin-right: $gutter;
+
+    &:nth-child(2n) {
+      margin-right: 0;
+    }
+  }
+}
+
 @media screen and (min-width: 769px) {
-  .card {
+  .cardContainer {
     &:nth-child(2n) {
       margin-right: $gutter;
     }
