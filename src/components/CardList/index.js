@@ -15,8 +15,7 @@ class CardList extends Component {
 
   handleInputChange = (e) => {
     this.setState({
-      eng: e.target.dataset.lang === 'eng' ? e.target.value : this.state.eng,
-      rus: e.target.dataset.lang === 'rus' ? e.target.value : this.state.rus
+      [e.target.name]: e.target.value
     })
   }
 
@@ -62,7 +61,7 @@ class CardList extends Component {
                 type='text'
                 onChange={ this.handleInputChange }
                 value={ this.state.eng }
-                data-lang='eng'
+                name='eng'
                 placeholder='Англ. слово'
                 required
               />
@@ -70,7 +69,7 @@ class CardList extends Component {
                 type='text'
                 onChange={ this.handleInputChange }
                 value={ this.state.rus }
-                data-lang='rus'
+                name='rus'
                 placeholder='Перевод'
                 required
               />

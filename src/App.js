@@ -31,12 +31,8 @@ class App extends Component {
 
   handleAddItem = (word) => {
     this.setState(({ wordsArr }) => {
-      const newWordsArr = [...wordsArr],
-            lastWordId = [...newWordsArr].pop().id,
-            newWordId = {id: +lastWordId + 1},
-            newWord = {...word, ...newWordId};
-
-      newWordsArr.push(newWord);
+      const lastWordId = +wordsArr[wordsArr.length - 1].id + 1;
+      const newWordsArr = [...wordsArr, { id: lastWordId.toString(), ...word}]
 
       return {
         wordsArr: newWordsArr
