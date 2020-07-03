@@ -7,9 +7,13 @@ import { CheckSquareOutlined, DeleteOutlined } from '@ant-design/icons';
 
 class Card extends Component {
 
-  state = {
-    active: false,
-    isRemembered: false
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      active: props.isRemembered,
+      isRemembered: props.isRemembered
+    }
   }
 
   handleCardClick = () => {
@@ -21,6 +25,7 @@ class Card extends Component {
   }
 
   isRememberClick = () => {
+    this.props.onRemembered(!this.state.isRemembered);
     this.setState(({ active, isRemembered }) => {
       return {
         isRemembered: !isRemembered,
