@@ -50,13 +50,12 @@ class CardList extends Component {
   getWord = async () => {
     const { searchValue } = this.state;
     const translateWord = await getTranslateWord(searchValue);
-    const error = typeof translateWord.status !== undefined ? translateWord.message : false;
 
     this.setState({
-      error,
+      error: translateWord.message || false,
       isBusy: false,
-      eng: translateWord.text,
-      rus: translateWord.translate,
+      eng: translateWord.text || '',
+      rus: translateWord.translate || '',
       searchValue: ''
     })
   }

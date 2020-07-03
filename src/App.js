@@ -28,50 +28,47 @@ class App extends Component {
   }
 
   handleDeletedItem = (id) => {
-    this.setState(({ wordsArr }) => {
-      const idx = wordsArr.findIndex(item => item.id === id);
-      const newWordsArr = [
-        ...wordsArr.slice(0, idx),
-        ...wordsArr.slice(idx + 1)
-      ];
+    const { wordsArr } = this.state;
+    const idx = wordsArr.findIndex(item => item.id === id);
+    const newWordsArr = [
+      ...wordsArr.slice(0, idx),
+      ...wordsArr.slice(idx + 1)
+    ];
 
-      database.set(newWordsArr);
-
-      return {
+    database.set(newWordsArr).then(() => {
+      this.setState({
         wordsArr: newWordsArr
-      }
-    })
+      })
+    });
   }
 
   handleAddItem = (word) => {
-    this.setState(({ wordsArr }) => {
-      const lastWordId = +wordsArr[wordsArr.length - 1].id + 1;
-      const newWordsArr = [...wordsArr, {
-        id: lastWordId.toString(),
-        ...word
-      }];
-
-      database.set(newWordsArr);
-
-      return {
+    const { wordsArr } = this.state;
+    const lastWordId = +wordsArr[wordsArr.length - 1].id + 1;
+    const newWordsArr = [...wordsArr, {
+      id: lastWordId.toString(),
+      ...word
+    }];
+    
+    database.set(newWordsArr).then(() => {
+      this.setState({
         wordsArr: newWordsArr
-      }
-    })
+      })
+    });
   }
 
   handleRememberedItem = (id, remember) => {
-    this.setState(({ wordsArr }) => {
-      const idx = wordsArr.findIndex(item => item.id === id);
-      const newWordsArr = [...wordsArr];
+    const { wordsArr } = this.state;
+    const idx = wordsArr.findIndex(item => item.id === id);
+    const newWordsArr = [...wordsArr];
 
-      newWordsArr[idx].isRemembered = remember;
+    newWordsArr[idx].isRemembered = remember;
 
-      database.set(newWordsArr);
-
-      return {
+    database.set(newWordsArr).then(() => {
+      this.setState({
         wordsArr: newWordsArr
-      }
-    })
+      })
+    });
   }
 
   render() {
