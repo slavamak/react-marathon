@@ -6,9 +6,11 @@ import s from './Header.module.scss';
 
 const Header = ({ children }) => {
   return (
-    <header className={s.header}>
+    <header>
       <Wrapper>
-        {children}
+        <div className={s.header}>
+          {children}
+        </div>
       </Wrapper>
     </header>
   )

@@ -6,12 +6,10 @@ import Hero from '../../components/Hero';
 import CardList from '../../components/CardList';
 import Footer from '../../components/Footer';
 
-import { database } from '../../services/firebase';
+import FirebaseContext from '../../context/firebaseContext';
 
 import { Button } from 'antd';
-import 'antd/lib/button/style/index.css';
-
-import { TranslationOutlined, ArrowDownOutlined } from '@ant-design/icons';
+import { TranslationOutlined, ArrowDownOutlined, LogoutOutlined } from '@ant-design/icons';
 
 class HomePage extends Component {
 
@@ -22,56 +20,53 @@ class HomePage extends Component {
   searchRef;
 
   componentDidMount() {
-    database.ref('/cards').once('value').then(res => {
-        this.setState({
-          wordsArr: res.val()
-        });
+    const { getUserCardsRef } = this.context;
+
+    getUserCardsRef().on('value', res => {
+      this.setState({
+        wordsArr: res.val() || []
+      });
     });
   }
 
   handleDeletedItem = (id) => {
     const { wordsArr } = this.state;
-    const idx = wordsArr.findIndex(item => item.id === id);
-    const newWordsArr = [
-      ...wordsArr.slice(0, idx),
-      ...wordsArr.slice(idx + 1)
-    ];
+    const { getUserCardsRef } = this.context;
 
-    database.ref('/cards')
-      .set(newWordsArr, error => error ? console.log(error) : console.log('Success!')).then(() => {
-        this.setState({
-          wordsArr: newWordsArr
-        })
-      });
+    const newWordsArr = wordsArr.filter(item => item.id !== id)
+
+    getUserCardsRef().set(newWordsArr, error => error ? console.log(error) : console.log('Success!'));
   }
 
   handleAddItem = (word) => {
     const { wordsArr } = this.state;
-    const lastWordId = +wordsArr[wordsArr.length - 1].id + 1;
+    const { getUserCardsRef } = this.context;
+
     const newWordsArr = [...wordsArr, {
-      id: lastWordId.toString(),
+      id: +new Date(),
       ...word
     }];
     
-    database.ref('/cards').set(newWordsArr, error => error ? console.log(error) : console.log('Success!')).then(() => {
-        this.setState({
-          wordsArr: newWordsArr
-        })
-      });
+    getUserCardsRef().set(newWordsArr, error => error ? console.log(error) : console.log('Success!'));
   }
 
   handleRememberedItem = (id, remember) => {
     const { wordsArr } = this.state;
-    const idx = wordsArr.findIndex(item => item.id === id);
-    const newWordsArr = [...wordsArr];
+    const { getUserCardsRef } = this.context;
 
-    newWordsArr[idx].isRemembered = remember;
+    const newWordsArr = wordsArr.map(item => (item.id === id ? {...item, isRemembered: remember} : {...item}));
 
-    database.ref('/cards').set(newWordsArr, error => error ? console.log(error) : console.log('Success!')).then(() => {
-        this.setState({
-          wordsArr: newWordsArr
-        })
-      });
+    getUserCardsRef().set(newWordsArr, error => error ? console.log(error) : console.log('Success!'));
+  }
+
+  handleSignOut = () => {
+    const { auth } = this.context;
+
+    auth.signOut().then(() => {
+      console.log('Sign-out successful.')
+    }).catch(error => {
+      console.log(error)
+    });
   }
 
   render() {
@@ -83,6 +78,14 @@ class HomePage extends Component {
           <Logo url='/' width='auto'>
             <TranslationOutlined style={{ fontSize: '64px', color: '#fff' }} />
           </Logo>
+          <Button 
+            shape='round'
+            icon={<LogoutOutlined />}
+            size='large'
+            onClick={this.handleSignOut}
+          >
+            Выйти
+          </Button>
         </Header>
         <main>
           <Hero 
@@ -114,5 +117,7 @@ class HomePage extends Component {
     )
   }
 }
+
+HomePage.contextType = FirebaseContext;
 
 export default HomePage;
