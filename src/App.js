@@ -7,13 +7,6 @@ import FirebaseContext from './context/firebaseContext';
 
 import { Spin } from 'antd';
 
-import 'antd/lib/layout/style/index.css';
-import 'antd/lib/space/style/index.css';
-import 'antd/lib/form/style/index.css';
-import 'antd/lib/input/style/index.css';
-import 'antd/lib/button/style/index.css';
-import 'antd/lib/spin/style/index.css';
-
 class App extends Component {
 
   state = {
