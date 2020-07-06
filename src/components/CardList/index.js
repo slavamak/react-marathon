@@ -4,7 +4,7 @@ import Section from '../Section';
 import Wrapper from '../Wrapper';
 import Card from '../Card';
 
-import { Input } from 'antd';
+import { Space, Form, Input, Button } from 'antd';
 import 'antd/lib/input/style/index.css';
 
 import getTranslateWord from '../../services/dictionary';
@@ -34,8 +34,7 @@ class CardList extends Component {
     })
   }
 
-  handleFormSubmit = (e) => {
-    e.preventDefault();
+  handleFormSubmit = () => {
     this.props.onAddItem({
       eng: this.state.eng,
       rus: this.state.rus,
@@ -49,13 +48,13 @@ class CardList extends Component {
 
   getWord = async () => {
     const { searchValue } = this.state;
-    const translateWord = await getTranslateWord(searchValue);
+    const translateWord = await getTranslateWord(searchValue, 'ru-en');
 
     this.setState({
       error: translateWord.message || false,
       isBusy: false,
-      eng: translateWord.text || '',
-      rus: translateWord.translate || '',
+      eng: translateWord.translate || '',
+      rus: translateWord.text || '',
       searchValue: ''
     })
   }
@@ -87,41 +86,58 @@ class CardList extends Component {
           <div className='textCenter'>
             <h3>Добавь новое слово</h3>
 
-            {
-              error ? <div>{ error }</div> : null
-            }
 
-            <Search 
-              ref={this.inputRef}
-              placeholder="Поиск слова"
-              onSearch={this.handleSearchWord}
-              onChange={this.handleSearchChange}
-              value={searchValue}
-              loading={isBusy}
-              enterButton
-            />
-            <form
-              className={s.wordsDay__form}
-              onSubmit={ this.handleFormSubmit }
-            >
-              <input 
-                type='text'
-                onChange={ this.handleInputChange }
-                value={ eng }
-                name='eng'
-                placeholder='Англ. слово'
-                required
+            <Space 
+              direction="vertical"
+              size="large"
+              style={ {width: '100%'} }
+              >
+              {
+                error ? <div>{ error }</div> : null
+              }
+
+              <Search 
+                ref={this.inputRef}
+                placeholder="Введите слово на русском"
+                onSearch={this.handleSearchWord}
+                onChange={this.handleSearchChange}
+                value={searchValue}
+                loading={isBusy}
+                enterButton
               />
-              <input 
-                type='text'
-                onChange={ this.handleInputChange }
-                value={ rus }
-                name='rus'
-                placeholder='Перевод'
-                required
-              />
-              <button>Добавить</button>
-            </form>
+
+              <Form
+                className={ s.wordsDay__form }
+                layout='vertical'
+                onFinish={ this.handleFormSubmit }
+                >
+                <Form.Item className={ s.wordsDay__formItem }>
+                  <Input 
+                    onChange={ this.handleInputChange }
+                    type='text'
+                    value={ rus }
+                    name='rus'
+                    placeholder='Слово'
+                    required
+                    />
+                </Form.Item>
+                <Form.Item className={ s.wordsDay__formItem }>
+                  <Input 
+                    onChange={ this.handleInputChange }
+                    type='text'
+                    value={ eng }
+                    name='eng'
+                    placeholder='Перевод'
+                    required
+                    />
+                </Form.Item>
+                <Form.Item className={ s.wordsDay__formItem }>
+                  <Button type="primary" htmlType="submit">Добавить</Button>
+                </Form.Item>
+              </Form>
+            </Space>
+            
+
           </div>
           <div className={s.wordsDay__list}>
             { 
@@ -134,7 +150,7 @@ class CardList extends Component {
                     isRemembered={isRemembered}
                     eng={eng}
                     rus={rus}
-                    key={id + eng}
+                    key={id}
                   />
                 ))
             }

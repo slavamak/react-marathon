@@ -1,115 +1,64 @@
 import React, { Component } from 'react';
 
-import Header from './components/Header';
-import Logo from './components/Logo';
-import Hero from './components/Hero';
-import CardList from './components/CardList';
-import Footer from './components/Footer';
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
 
-import database from './services/database';
+import FirebaseContext from './context/firebaseContext';
 
-import { Button } from 'antd';
+import { Spin } from 'antd';
+
+import 'antd/lib/layout/style/index.css';
+import 'antd/lib/space/style/index.css';
+import 'antd/lib/form/style/index.css';
+import 'antd/lib/input/style/index.css';
 import 'antd/lib/button/style/index.css';
-
-import { TranslationOutlined, ArrowDownOutlined } from '@ant-design/icons';
+import 'antd/lib/spin/style/index.css';
 
 class App extends Component {
 
   state = {
-    wordsArr: []
+    user: null
   }
 
-  searchRef;
+  componentDidMount() {
+    const { auth, setUserUid } = this.context;
 
-  async componentDidMount() {
-    this.setState({
-      wordsArr: await database.get()
-    });
-  }
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        setUserUid(user.uid);
 
-  handleDeletedItem = (id) => {
-    const { wordsArr } = this.state;
-    const idx = wordsArr.findIndex(item => item.id === id);
-    const newWordsArr = [
-      ...wordsArr.slice(0, idx),
-      ...wordsArr.slice(idx + 1)
-    ];
+        this.setState({
+          user
+        })
+      } else {
+        setUserUid(null);
 
-    database.set(newWordsArr).then(() => {
-      this.setState({
-        wordsArr: newWordsArr
-      })
-    });
-  }
-
-  handleAddItem = (word) => {
-    const { wordsArr } = this.state;
-    const lastWordId = +wordsArr[wordsArr.length - 1].id + 1;
-    const newWordsArr = [...wordsArr, {
-      id: lastWordId.toString(),
-      ...word
-    }];
-    
-    database.set(newWordsArr).then(() => {
-      this.setState({
-        wordsArr: newWordsArr
-      })
-    });
-  }
-
-  handleRememberedItem = (id, remember) => {
-    const { wordsArr } = this.state;
-    const idx = wordsArr.findIndex(item => item.id === id);
-    const newWordsArr = [...wordsArr];
-
-    newWordsArr[idx].isRemembered = remember;
-
-    database.set(newWordsArr).then(() => {
-      this.setState({
-        wordsArr: newWordsArr
-      })
-    });
+        this.setState({
+          user: false
+        })
+      }
+    })
   }
 
   render() {
-    const { wordsArr } = this.state;
+    const { user } = this.state;
+
+    if (user === null) {
+      return (
+        <div className='loader'>
+          <Spin size='large' />
+        </div>
+      );
+    }
 
     return (
       <React.Fragment>
-        <Header>
-          <Logo url='/' width='auto'>
-            <TranslationOutlined style={{ fontSize: '64px', color: '#fff' }} />
-          </Logo>
-        </Header>
-        <main>
-          <Hero 
-            title='Учите слова онлайн'
-            description='Воспользуйтесь карточками для запоминания и пополнения активныйх словарных запасов' 
-          >
-            <Button 
-              shape='round'
-              icon={<ArrowDownOutlined />}
-              size='large'
-              onClick={() => this.searchRef.current.focus()}
-            >
-              Начать
-            </Button>
-          </Hero>
-          <CardList 
-            onDeletedItem={this.handleDeletedItem}
-            onRememberedItem={this.handleRememberedItem}
-            onAddItem={this.handleAddItem}
-            searchRef={ref => this.searchRef = ref}
-            title='Список ваших слов'
-            array={ wordsArr }
-          />
-        </main>
-        <Footer>
-          <p style={{textAlign: 'right'}}>React Marathon © 2020</p>
-        </Footer>
+        { user ? <HomePage /> : <LoginPage /> }
       </React.Fragment>
     )
   }
 }
+
+App.contextType = FirebaseContext;
 
 export default App;
