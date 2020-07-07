@@ -1,7 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom'
+import { BrowserRouter } from 'react-router-dom';
 
-import 'antd/lib/layout/style/index.css';
 import 'antd/lib/space/style/index.css';
 import 'antd/lib/form/style/index.css';
 import 'antd/lib/input/style/index.css';
@@ -15,7 +15,9 @@ import App from './App';
 
 ReactDOM.render(
   <FirebaseContext.Provider value={ new Firebase() }>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </FirebaseContext.Provider>,
   document.getElementById('root')
 );

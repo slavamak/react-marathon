@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 
 import FirebaseContext from '../../context/firebaseContext';
 
-import { Layout, Form, Input, Button } from 'antd';
+import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import s from './LoginPage.module.scss';
-
-const { Content } = Layout;
 
 class LoginPage extends Component {
 
@@ -31,13 +29,17 @@ class LoginPage extends Component {
   }
 
   handleSignIn = (email, password) => {
-    const { signInWithEmail } = this.context;
+    const { signInWithEmail, setUserUid } = this.context;
+    const { history } = this.props;
 
-    signInWithEmail(email, password).then(() => {
+    signInWithEmail(email, password).then((res) => {
       console.log('Sign-in successful.');
       this.setState({
         error: null
-      })
+      });
+      setUserUid(res.user.uid);
+      localStorage.setItem('user', res.user.uid);
+      history.push('/');
     }).catch(error => {
       this.setState({
         error: error.message
@@ -46,13 +48,17 @@ class LoginPage extends Component {
   }
 
   handleSignUp = (email, password) => {
-    const { createUserWithEmail } = this.context;
+    const { createUserWithEmail, setUserUid } = this.context;
+    const { history } = this.props;
 
-    createUserWithEmail(email, password).then(() => {
+    createUserWithEmail(email, password).then((res) => {
       console.log('Sign-up successful.');
       this.setState({
         error: null
-      })
+      });
+      setUserUid(res.user.uid);
+      localStorage.setItem('user', res.user.uid);
+      history.push('/');
     }).catch(error => {
       console.log(error)
       this.setState({
@@ -65,62 +71,60 @@ class LoginPage extends Component {
     const { register, error } = this.state;
 
     return (
-      <Layout className={ s.Layout }>
-        <Content className={ s.Content }>
-          <Form
-            className={ s.Form }
-            name="basic"
-            onFinish={this.onFinish}
+      <div className={ s.Content }>
+        <Form
+          className={ s.Form }
+          name="basic"
+          onFinish={this.onFinish}
+        >
+          { error ? <Form.Item
+            validateStatus='error'
           >
-            { error ? <Form.Item
-              validateStatus='error'
-            >
-              <div className='has-feedback'>{ error }</div>
-            </Form.Item> : null }
+            <div className='has-feedback'>{ error }</div>
+          </Form.Item> : null }
 
-            <Form.Item
-              label="Email"
-              name="email"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your email!',
-                },
-              ]}
-            >
-              <Input prefix={<UserOutlined className="site-form-item-icon" />} />
-            </Form.Item>
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[
+              {
+                required: true,
+                message: 'Please input your email!',
+              },
+            ]}
+          >
+            <Input prefix={<UserOutlined className="site-form-item-icon" />} />
+          </Form.Item>
 
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your password!',
-                },
-              ]}
-            >
-              <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} />
-            </Form.Item>
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: 'Please input your password!',
+              },
+            ]}
+          >
+            <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} />
+          </Form.Item>
 
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                { register ? 'Войти' : 'Зарегистрироваться'}
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              { register ? 'Войти' : 'Зарегистрироваться'}
+            </Button>
+            <span className={ s.Register }>
+              <span>Или </span>
+              <Button 
+                className={ s.Btn }
+                type='link'
+                onClick={ this.handleChangeRegister }>
+                { register ? 'зарегистрироваться' : 'Войти' }
               </Button>
-              <span className={ s.Register }>
-                <span>Или </span>
-                <Button 
-                  className={ s.Btn }
-                  type='link'
-                  onClick={ this.handleChangeRegister }>
-                  { register ? 'зарегистрироваться' : 'Войти' }
-                </Button>
-              </span>
-            </Form.Item>
-          </Form>
-        </Content>
-      </Layout>
+            </span>
+          </Form.Item>
+        </Form>
+      </div>
     )
   }
 }
