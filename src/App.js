@@ -59,13 +59,13 @@ class App extends Component {
           <Route path='/login' component={ LoginPage } />
           <Route render={() => {
             return (
-              <>
+              <Switch>
                 <PrivateRoute exact path='/' component={ HomePage } />
                 <PrivateRoute path='/about' component={ About } />
-              </>
+                <Redirect to='/' />
+              </Switch>
             )
           }} />
-          <Redirect to='/' />
         </Switch>
     )
   }
