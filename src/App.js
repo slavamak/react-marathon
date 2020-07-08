@@ -1,18 +1,23 @@
 import React, { Component } from 'react';
+import { withRouter, Route, Redirect, Switch } from 'react-router-dom';
 
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
+import Layout from './components/Layout';
+
+import { PrivateRoute } from './utils/privateRoute';
 
 import FirebaseContext from './context/firebaseContext';
 
 import { Spin } from 'antd';
 
-import 'antd/lib/layout/style/index.css';
-import 'antd/lib/space/style/index.css';
-import 'antd/lib/form/style/index.css';
-import 'antd/lib/input/style/index.css';
-import 'antd/lib/button/style/index.css';
-import 'antd/lib/spin/style/index.css';
+const About = () => {
+  return (
+    <Layout>
+      <p>About me</p>
+    </Layout>
+  )
+}
 
 class App extends Component {
 
@@ -22,20 +27,18 @@ class App extends Component {
 
   componentDidMount() {
     const { auth, setUserUid } = this.context;
+    const { history } = this.props;
 
     auth.onAuthStateChanged(user => {
-      if (user) {
+      if (user && !this.state.user) {
         setUserUid(user.uid);
-
-        this.setState({
-          user
-        })
+        localStorage.setItem('user', JSON.stringify(user.uid));
+        this.setState({ user });
+        history.push('/');
       } else {
         setUserUid(null);
-
-        this.setState({
-          user: false
-        })
+        localStorage.removeItem('user');
+        this.setState({ user: false })
       }
     })
   }
@@ -52,13 +55,22 @@ class App extends Component {
     }
 
     return (
-      <React.Fragment>
-        { user ? <HomePage /> : <LoginPage /> }
-      </React.Fragment>
+        <Switch>
+          <Route path='/login' component={ LoginPage } />
+          <Route render={() => {
+            return (
+              <>
+                <PrivateRoute exact path='/' component={ HomePage } />
+                <PrivateRoute path='/about' component={ About } />
+              </>
+            )
+          }} />
+          <Redirect to='/' />
+        </Switch>
     )
   }
 }
 
 App.contextType = FirebaseContext;
 
-export default App;
+export default withRouter(App);
