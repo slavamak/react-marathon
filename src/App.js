@@ -7,6 +7,10 @@ import Layout from './components/Layout';
 
 import { PrivateRoute } from './utils/privateRoute';
 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { addUserAction } from './actions/userAction';
+
 import FirebaseContext from './context/firebaseContext';
 
 import { Spin } from 'antd';
@@ -21,32 +25,27 @@ const About = () => {
 
 class App extends Component {
 
-  state = {
-    user: null
-  }
-
   componentDidMount() {
     const { auth, setUserUid } = this.context;
-    const { history } = this.props;
+    const { history, addUser, userUid } = this.props;
 
     auth.onAuthStateChanged(user => {
-      if (user && !this.state.user) {
+      if (user && !userUid) {
         setUserUid(user.uid);
         localStorage.setItem('user', JSON.stringify(user.uid));
-        this.setState({ user });
+        addUser(user);
         history.push('/');
       } else {
         setUserUid(null);
         localStorage.removeItem('user');
-        this.setState({ user: false })
       }
     })
   }
 
   render() {
-    const { user } = this.state;
+    const { userUid } = this.props;
 
-    if (user === null) {
+    if (userUid === undefined) {
       return (
         <div className='loader'>
           <Spin size='large' />
@@ -73,4 +72,16 @@ class App extends Component {
 
 App.contextType = FirebaseContext;
 
-export default withRouter(App);
+const mapStateToProps = (state) => {
+  return {
+    userUid: state.user.userUid
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    addUser: addUserAction
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));
