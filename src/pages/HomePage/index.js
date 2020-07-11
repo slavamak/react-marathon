@@ -6,25 +6,24 @@ import CardList from '../../components/CardList';
 
 import FirebaseContext from '../../context/firebaseContext';
 
+import { fetchCardList } from '../../actions/cardListAction';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
 import { Button } from 'antd';
 import { ArrowDownOutlined } from '@ant-design/icons';
 
 class HomePage extends Component {
 
-  state = {
-    wordsArr: []
-  }
-
   searchRef;
 
   componentDidMount() {
     const { getUserCardsRef } = this.context;
+    const { fetchCardList } = this.props;
 
-    getUserCardsRef().on('value', res => {
-      this.setState({
-        wordsArr: res.val() || []
-      });
-    });
+    console.log(this.props)
+
+    fetchCardList(getUserCardsRef);
   }
 
   handleDeletedItem = (id) => {
@@ -58,7 +57,7 @@ class HomePage extends Component {
   }
 
   render() {
-    const { wordsArr } = this.state;
+    const { wordsArr } = this.props;
 
     return (
       <Layout>
@@ -90,4 +89,17 @@ class HomePage extends Component {
 
 HomePage.contextType = FirebaseContext;
 
-export default HomePage;
+const mapStateToProps = (state) => {
+  return {
+    isBusy: state.cardList.isBusy,
+    wordsArr: state.cardList.payload || []
+  }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    fetchCardList: fetchCardList
+  }, dispatch)
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
