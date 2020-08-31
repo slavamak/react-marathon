@@ -14,10 +14,12 @@ class Layout extends Component {
 
   handleSignOut = () => {
     const { auth } = this.context;
+    const { history } = this.props;
 
     auth.signOut().then(() => {
       console.log('Sign-out successful.');
       localStorage.removeItem('user');
+      history.push('/');
     }).catch(error => {
       console.log(error)
     });

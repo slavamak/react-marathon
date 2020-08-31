@@ -27,7 +27,7 @@ class HomePage extends Component {
   }
 
   handleDeletedItem = (id) => {
-    const { wordsArr } = this.state;
+    const { wordsArr } = this.props;
     const { getUserCardsRef } = this.context;
 
     const newWordsArr = wordsArr.filter(item => item.id !== id)
@@ -36,7 +36,7 @@ class HomePage extends Component {
   }
 
   handleAddItem = (word) => {
-    const { wordsArr } = this.state;
+    const { wordsArr } = this.props;
     const { getUserCardsRef } = this.context;
 
     const newWordsArr = [...wordsArr, {
@@ -48,7 +48,7 @@ class HomePage extends Component {
   }
 
   handleRememberedItem = (id, remember) => {
-    const { wordsArr } = this.state;
+    const { wordsArr } = this.props;
     const { getUserCardsRef } = this.context;
 
     const newWordsArr = wordsArr.map(item => (item.id === id ? {...item, isRemembered: remember} : {...item}));
@@ -60,7 +60,7 @@ class HomePage extends Component {
     const { wordsArr } = this.props;
 
     return (
-      <Layout>
+      <Layout {...this.props}>
         <Hero 
           title='Учите слова онлайн'
           description='Воспользуйтесь карточками для запоминания и пополнения активныйх словарных запасов' 

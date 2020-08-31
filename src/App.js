@@ -74,7 +74,7 @@ App.contextType = FirebaseContext;
 
 const mapStateToProps = (state) => {
   return {
-    userUid: state.user.userUid
+    userUid: state.user.userUid || null
   }
 }
 
